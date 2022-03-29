@@ -22,7 +22,7 @@ Written in the <span style="font-weight:bold;">Nim</span> programming language.
 
 
 ## Setup and Useage
-Download and install DMD from https://dlang.org/download.html to compile ptdownloader.
+Download and install Nim from https://nim-lang.org/install.html to compile ptdownloader.
 
 ```
 $ git clone https://github.com/horstine1337/podtail_downloader_nim.git
