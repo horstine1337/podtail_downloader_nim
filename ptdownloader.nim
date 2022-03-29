@@ -73,21 +73,13 @@ proc downloadLinks(downloadLinks: openArray[string], pathTo: string) =
 proc findAllDownloadLinksByRegex(podcastUrl: string): seq[string] =
   var done: bool = false
   var curPageNumber: int = 1
-  let urlWithParametersPrefix: string = podcastUrl & "?page="
-  const urlWithParametersSuffix: string = "&append=false&sort=latest&q="
+  let urlWithParameters: string = podcastUrl & "?page=$1&append=false&sort=latest&q="
   var mp3Reg = re("(?<=href=\\\")https?:\\/\\/?[^ ]*\\.\\w*/.+mp3") # Look ma, magic!
   var ret: seq[string]
   
   while not done:
-    #because string.format doesn't work as in any other language,
-    #since some energy vampire in the Nim community,
-    #which I see in every basic feature request just splurting out "No";
-    #sometimes even "No and no", who - I'm also pretty sure - 
-    #will sabotage anyone confronting this behavior;
-    #and then everybody else has to clean up by explaining and apologising
-    #and starting a real conversation, we use concatination to get the dl url
     let urlForCurrentPage: string = 
-      urlWithParametersPrefix & intToStr(curPageNumber) & urlWithParametersSuffix
+      urlWithParameters.format(curPageNumber)
     curPageNumber = curPageNumber + 1
     echo "Searching download links on " & urlForCurrentPage
     let tmpReceivedHtml: string = getContent(client, urlForCurrentPage)
@@ -110,13 +102,12 @@ proc findAllDownloadLinksByRegex(podcastUrl: string): seq[string] =
 proc findAllDownloadLinksByDom(podcastUrl: string): seq[string] =
     var done: bool = false
     var curPageNumber: int = 1
-    let urlWithParametersPrefix: string = podcastUrl & "?page="
-    const urlWithParametersSuffix: string = "&append=false&sort=latest&q="
+    let urlWithParameters: string = podcastUrl & "?page=$1&append=false&sort=latest&q="
     var ret: seq[string]
 
     while not done:
       let urlForCurrentPage: string = 
-        urlWithParametersPrefix & intToStr(curPageNumber) & urlWithParametersSuffix
+        urlWithParameters.format(curPageNumber)
       curPageNumber = curPageNumber + 1
 
       echo "Searching download links on " & urlForCurrentPage
